@@ -4,7 +4,8 @@ import cors from 'cors';
 
 import { 
     topClockwise,
-    topCounterClockwise 
+    topCounterClockwise,
+    bottomClockwise,
 } from './rotation.js';
 
 const app = express();
@@ -34,7 +35,6 @@ router.post('/rotate', (req, res) => {
         return res.status(400).json({ error: 'Invalid data format' });
     }
     else if (data.move === 'U') {
-        // Perform rotation logic here
         const result = topClockwise(data.cubeState.pieces);
         return res.json({ pieces: result });
     }
@@ -42,7 +42,10 @@ router.post('/rotate', (req, res) => {
         const result = topCounterClockwise(data.cubeState.pieces);
         return res.json({ pieces: result });
     }
-    //res.json({ received: data });
+    else if (data.move === 'D') {
+        const result = bottomClockwise(data.cubeState.pieces);
+        return res.json({ pieces: result });
+    }
 });
 
 app.listen(port, () => {
