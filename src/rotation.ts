@@ -684,3 +684,78 @@ export function frontClockwise(cubeState: CubeState): CubeState {
 
   return newState;
 }
+
+
+/**
+ * Rotate the front face (counter-clockwise) of the cube state and return a new cube state.
+ */
+export function frontCounterClockwise(cubeState: CubeState): CubeState {
+  // Helper: deep copy to avoid mutating the original
+  const newState: CubeState = JSON.parse(JSON.stringify(cubeState));
+
+  // Helper to change colors for a piece when rotating it on the front face
+  function changeColors(colors: string[]): string[] {
+    const out = colors.slice(); // copy
+    out[5] = colors[2];
+    out[3] = colors[5];
+    out[4] = colors[3];
+    out[2] = colors[4];
+    return out;
+  }
+
+  // Build locations_matrix
+  const locationsMatrix: number[][] = [];
+  for (let i = 3; i > 0; i--) {
+    const locationsVector: number[] = [];
+    for (let j = 0; j < 27; j+=9) {
+      locationsVector.push(3*i -1 + j);
+    }
+    locationsMatrix.push(locationsVector);
+  }
+
+  // Transpose locations_matrix -> rotation_matrix
+  const rotationMatrix: number[][] = [];
+  for (let i = 0; i < 3; i++) {
+    const locationsVector: number[] = [];
+    for (let j = 0; j < 3; j++) {
+      locationsVector.push(locationsMatrix[j][i]);
+    }
+    rotationMatrix.push(locationsVector);
+  }
+
+  // Swap first and third rows
+  const tmp = rotationMatrix[0];
+  rotationMatrix[0] = rotationMatrix[2];
+  rotationMatrix[2] = tmp;
+
+  // Update newState based on the rotation
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      let newI: number | null = null;
+      let newJ: number | null = null;
+      for (let m = 0; m < 3; m++) {
+        for (let n = 0; n < 3; n++) {
+          if (rotationMatrix[m][n] === locationsMatrix[i][j]) {
+            newI = m;
+            newJ = n;
+          }
+        }
+      }
+
+      if (newI === null || newJ === null) continue; // safety
+
+      const fromIdx = locationsMatrix[i][j];
+      const toIdx = locationsMatrix[newI][newJ];
+
+      const fromPiece = cubeState[fromIdx];
+      if (!fromPiece) continue; // safety
+
+      newState[toIdx] = {
+        ...newState[toIdx],
+        colors: changeColors(fromPiece.colors.slice()),
+      };
+    }
+  }
+
+  return newState;
+}
