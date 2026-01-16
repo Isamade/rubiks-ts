@@ -9,7 +9,8 @@ import {
     bottomCounterClockwise,
     rightClockwise,
     rightCounterClockwise,
-    leftClockwise
+    leftClockwise,
+    leftCounterClockwise
 } from './rotation.js';
 
 const app = express();
@@ -65,6 +66,10 @@ router.post('/rotate', (req, res) => {
     else if (data.move === 'L') {
         const result = leftClockwise(data.cubeState.pieces);
         return res.json({pieces: result})
+    }
+    else if (data.move === 'L\'') {
+        const result = leftCounterClockwise(data.cubeState.pieces);
+        return res.json({pieces: result});
     }
     else {
         return res.json({pieces: data.cubeState.pieces});
