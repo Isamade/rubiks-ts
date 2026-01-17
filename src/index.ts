@@ -17,6 +17,8 @@ import {
     backCounterClockwise
 } from './rotation.js';
 
+import { scrambleCube } from './scramble.js';
+
 const app = express();
 const port = 3000;
 const router = Router();
@@ -94,6 +96,16 @@ router.post('/rotate', (req, res) => {
     else {
         return res.json({pieces: data.cubeState.pieces});
     }
+});
+
+router.post('/scramble', (req, res) => {
+    const data = req.body;
+    console.log('Received scramble request:', data);
+    if (!data || typeof data !== 'object' || typeof data.movesCount !== 'number' || !data.cubeState) {
+        return res.status(400).json({ error: 'Invalid request data' });
+    }
+    const scrambledState = scrambleCube(data.cubeState.pieces, data.movesCount);
+    return res.json({ pieces: scrambledState });
 });
 
 app.listen(port, () => {
