@@ -20,10 +20,10 @@ export function topClockwise(cubeState: CubeState): CubeState {
 
   // Build locations_matrix
   const locationsMatrix: number[][] = [];
-  for (let i = 3; i >= 1; i--) {
+  for (let i = -3; i <= -1; i++) {
     const locationsVector: number[] = [];
     for (let j = 1; j <= 3; j++) {
-      locationsVector.push(9 * j - i);
+      locationsVector.push(9 * j + i);
     }
     locationsMatrix.push(locationsVector);
   }
@@ -97,10 +97,10 @@ export function topCounterClockwise(cubeState: CubeState): CubeState {
 
   // Build locations_matrix
   const locationsMatrix: number[][] = [];
-  for (let i = 3; i >= 1; i--) {
+  for (let i = -3; i <= -1; i++) {
     const locationsVector: number[] = [];
     for (let j = 1; j <= 3; j++) {
-      locationsVector.push(9 * j - i);
+      locationsVector.push(9 * j + i);
     }
     locationsMatrix.push(locationsVector);
   }
