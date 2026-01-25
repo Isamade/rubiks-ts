@@ -172,9 +172,9 @@ export function bottomClockwise(cubeState: CubeState): CubeState {
 
   // Build locations_matrix
   const locationsMatrix: number[][] = [];
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i <= 2; i++) {
     const locationsVector: number[] = [];
-    for (let j = 0; j < 3; j++) {
+    for (let j = 2; j >= 0; j--) {
       locationsVector.push(9 * j + i);
     }
     locationsMatrix.push(locationsVector);
@@ -190,10 +190,12 @@ export function bottomClockwise(cubeState: CubeState): CubeState {
     rotationMatrix.push(locationsVector);
   }
 
-  // Swap first and third rows
-  const tmp = rotationMatrix[0];
-  rotationMatrix[0] = rotationMatrix[2];
-  rotationMatrix[2] = tmp;
+  // Swap first and third columns
+  for (let i = 0; i < 3; i++) {
+    const tmp = rotationMatrix[i][0];
+    rotationMatrix[i][0] = rotationMatrix[i][2];
+    rotationMatrix[i][2] = tmp;
+  }
   
   // Update newState based on the rotation
   for (let i = 0; i < 3; i++) {
@@ -247,9 +249,9 @@ export function bottomCounterClockwise(cubeState: CubeState): CubeState {
 
   // Build locations_matrix
   const locationsMatrix: number[][] = [];
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i <= 2; i++) {
     const locationsVector: number[] = [];
-    for (let j = 0; j < 3; j++) {
+    for (let j = 2; j <= 0; j--) {
       locationsVector.push(9 * j + i);
     }
     locationsMatrix.push(locationsVector);
@@ -265,12 +267,10 @@ export function bottomCounterClockwise(cubeState: CubeState): CubeState {
     rotationMatrix.push(locationsVector);
   }
 
-  // Swap first and third columns
-  for (let i = 0; i < 3; i++) {
-    const tmp = rotationMatrix[i][0];
-    rotationMatrix[i][0] = rotationMatrix[i][2];
-    rotationMatrix[i][2] = tmp;
-  }
+  // Swap first and third rows
+  const tmp = rotationMatrix[0];
+  rotationMatrix[0] = rotationMatrix[2];
+  rotationMatrix[2] = tmp;
 
   // Update newState based on the rotation
   for (let i = 0; i < 3; i++) {
