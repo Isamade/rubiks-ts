@@ -628,10 +628,10 @@ export function frontClockwise(cubeState: CubeState): CubeState {
 
   // Build locations_matrix
   const locationsMatrix: number[][] = [];
-  for (let i = 3; i > 0; i--) {
+  for (let i = 0; i >= -2; i--) {
     const locationsVector: number[] = [];
-    for (let j = 0; j < 27; j+=9) {
-      locationsVector.push(3*i -1 + j);
+    for (let j = 1; j <= 3; j++) {
+      locationsVector.push(9*j + 3*i -1);
     }
     locationsMatrix.push(locationsVector);
   }
@@ -705,10 +705,10 @@ export function frontCounterClockwise(cubeState: CubeState): CubeState {
 
   // Build locations_matrix
   const locationsMatrix: number[][] = [];
-  for (let i = 3; i > 0; i--) {
+  for (let i = 0; i >= -2; i--) {
     const locationsVector: number[] = [];
-    for (let j = 0; j < 27; j+=9) {
-      locationsVector.push(3*i -1 + j);
+    for (let j = 1; j <= 3; j++) {
+      locationsVector.push(9*j + 3*i -1);
     }
     locationsMatrix.push(locationsVector);
   }
