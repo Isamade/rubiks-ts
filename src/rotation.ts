@@ -780,10 +780,10 @@ export function backClockwise(cubeState: CubeState): CubeState {
 
   // Build locations_matrix
   const locationsMatrix: number[][] = [];
-  for (let i = 1; i < 4; i++) {
+  for (let i = -1; i >= -3; i--) {
     const locationsVector: number[] = [];
-    for (let j = 0; j < 27; j+=9) {
-      locationsVector.push(3*(9-i) - j);
+    for (let j = 3; j >= 1; j--) {
+      locationsVector.push((9*j)+3*i);
     }
     locationsMatrix.push(locationsVector);
   }
@@ -857,10 +857,10 @@ export function backCounterClockwise(cubeState: CubeState): CubeState {
 
   // Build locations_matrix
   const locationsMatrix: number[][] = [];
-  for (let i = 1; i < 4; i++) {
+  for (let i = -1; i >= -3; i--) {
     const locationsVector: number[] = [];
-    for (let j = 0; j < 27; j+=9) {
-      locationsVector.push(3*(9-i) - j);
+    for (let j = 3; j >= 1; j--) {
+      locationsVector.push((9*j)+3*i);
     }
     locationsMatrix.push(locationsVector);
   }
