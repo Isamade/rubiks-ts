@@ -15,8 +15,7 @@ import {
     backCounterClockwise
 } from './rotation.js';
 
-
-export function scrambleCube(cubeState: CubeState, movesCount: number): CubeState {
+export function scrambleCube(cubeState: CubeState, movesCount: number): any {
     // Implementation of scramble logic
     const possibleMoves = ['U', 'U\'', 'D', 'D\'', 'R', 'R\'', 'L', 'L\'', 'F', 'F\'', 'B', 'B\''];
     const moves = [];
@@ -64,5 +63,5 @@ export function scrambleCube(cubeState: CubeState, movesCount: number): CubeStat
                 break;
         }
     });
-    return cubeState;
+    return {moves, cubeState };
 }
