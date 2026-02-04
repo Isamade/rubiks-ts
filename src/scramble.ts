@@ -18,12 +18,12 @@ import {
 export function scrambleCube(cubeState: CubeState, movesCount: number): any {
     // Implementation of scramble logic
     const possibleMoves = ['U', 'U\'', 'D', 'D\'', 'R', 'R\'', 'L', 'L\'', 'F', 'F\'', 'B', 'B\''];
-    const moves = [];
+    const rotationSequence = [];
     for (let i = 0; i < movesCount; i++) {
         const randomIndex = Math.floor(Math.random() * possibleMoves.length);
-        moves.push(possibleMoves[randomIndex]);
+        rotationSequence.push(possibleMoves[randomIndex]);
     }
-    moves.forEach(move => {
+    rotationSequence.forEach(move => {
         switch (move) {
             case 'U':
                 cubeState = topClockwise(cubeState);
@@ -63,5 +63,5 @@ export function scrambleCube(cubeState: CubeState, movesCount: number): any {
                 break;
         }
     });
-    return {moves, cubeState };
+    return {rotationSequence, cubeState };
 }
