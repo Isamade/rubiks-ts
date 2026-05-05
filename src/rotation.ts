@@ -249,9 +249,9 @@ export function bottomCounterClockwise(cubeState: CubeState): CubeState {
 
   // Build locations_matrix
   const locationsMatrix: number[][] = [];
-  for (let i = 0; i <= 2; i++) {
+  for (let i = 2; i >= 0; i--) {
     const locationsVector: number[] = [];
-    for (let j = 2; j <= 0; j--) {
+    for (let j = 0; j <= 2; j++) {
       locationsVector.push(9 * j + i);
     }
     locationsMatrix.push(locationsVector);
