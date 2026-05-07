@@ -2,7 +2,7 @@ import express from 'express';
 import { Router } from 'express';
 import cors from 'cors';
 
-import { 
+import {
     topClockwise,
     topCounterClockwise,
     bottomClockwise,
@@ -18,6 +18,7 @@ import {
 } from './rotation.js';
 
 import { scrambleCube } from './scramble.js';
+import { solveAlgorithmic } from './solver-client.js';
 
 const app = express();
 const port = 3000;
@@ -36,9 +37,8 @@ router.get('/api/data', (req, res) => {
 });
 
 
-router.post('/rotate', (req, res) => {
+router.post('/api/rotate', (req, res) => {
     const data = req.body;
-    console.log('Received data:', data);
     if (!data) {
         return res.status(400).json({ error: 'No data provided' });
     }
@@ -63,49 +63,62 @@ router.post('/rotate', (req, res) => {
     }
     else if (data.move === 'R') {
         const result = rightClockwise(data.cubeState.pieces);
-        return res.json({pieces: result });
+        return res.json({ pieces: result });
     }
     else if (data.move === 'R\'') {
         const result = rightCounterClockwise(data.cubeState.pieces);
-        return res.json({pieces: result});
+        return res.json({ pieces: result });
     }
     else if (data.move === 'L') {
         const result = leftClockwise(data.cubeState.pieces);
-        return res.json({pieces: result})
+        return res.json({ pieces: result })
     }
     else if (data.move === 'L\'') {
         const result = leftCounterClockwise(data.cubeState.pieces);
-        return res.json({pieces: result});
+        return res.json({ pieces: result });
     }
     else if (data.move === 'F') {
         const result = frontClockwise(data.cubeState.pieces);
-        return res.json({pieces: result});
+        return res.json({ pieces: result });
     }
     else if (data.move === 'F\'') {
         const result = frontCounterClockwise(data.cubeState.pieces);
-        return res.json({pieces: result});
+        return res.json({ pieces: result });
     }
     else if (data.move === 'B') {
         const result = backClockwise(data.cubeState.pieces);
-        return res.json({pieces: result});
+        return res.json({ pieces: result });
     }
     else if (data.move === 'B\'') {
         const result = backCounterClockwise(data.cubeState.pieces);
-        return res.json({pieces: result});
+        return res.json({ pieces: result });
     }
     else {
-        return res.json({pieces: data.cubeState.pieces});
+        return res.json({ pieces: data.cubeState.pieces });
     }
 });
 
-router.post('/scramble', (req, res) => {
+router.post('/api/scramble', (req, res) => {
     const data = req.body;
-    console.log('Received scramble request:', data);
     if (!data || typeof data !== 'object' || typeof data.movesCount !== 'number' || !data.cubeState) {
         return res.status(400).json({ error: 'Invalid request data' });
     }
-    const scrambledState = scrambleCube(data.cubeState.pieces, data.movesCount);
-    return res.json({ pieces: scrambledState });
+    const { cubeState } = scrambleCube(data.cubeState.pieces, data.movesCount);
+    return res.json({ pieces: cubeState });
+});
+
+router.post('/api/solve', async (req, res) => {
+    const data = req.body;
+    if (!data || !data.cubeState) {
+        return res.status(400).json({ error: 'Invalid request data' });
+    }
+    try {
+        const result = await solveAlgorithmic(data.cubeState);
+        return res.json(result);
+    } catch (err: any) {
+        console.error('Error calling solver:', err);
+        return res.status(500).json({ error: err.message });
+    }
 });
 
 app.listen(port, () => {

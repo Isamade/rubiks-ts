@@ -1,6 +1,6 @@
 import {
     Piece,
-    CubeState, 
+    CubeState,
     topClockwise,
     topCounterClockwise,
     bottomClockwise,
@@ -63,5 +63,5 @@ export function scrambleCube(cubeState: CubeState, movesCount: number): any {
                 break;
         }
     });
-    return {rotationSequence, cubeState };
+    return { rotationSequence, cubeState };
 }
