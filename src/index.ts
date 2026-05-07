@@ -37,7 +37,7 @@ router.get('/api/data', (req, res) => {
 });
 
 
-router.post('/api/rotate', (req, res) => {
+router.post('/rotate', (req, res) => {
     const data = req.body;
     if (!data) {
         return res.status(400).json({ error: 'No data provided' });
@@ -98,7 +98,7 @@ router.post('/api/rotate', (req, res) => {
     }
 });
 
-router.post('/api/scramble', (req, res) => {
+router.post('/scramble', (req, res) => {
     const data = req.body;
     if (!data || typeof data !== 'object' || typeof data.movesCount !== 'number' || !data.cubeState) {
         return res.status(400).json({ error: 'Invalid request data' });
@@ -107,7 +107,7 @@ router.post('/api/scramble', (req, res) => {
     return res.json({ pieces: cubeState });
 });
 
-router.post('/api/solve', async (req, res) => {
+router.post('/solve', async (req, res) => {
     const data = req.body;
     if (!data || !data.cubeState) {
         return res.status(400).json({ error: 'Invalid request data' });
