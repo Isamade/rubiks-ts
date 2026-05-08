@@ -20,7 +20,7 @@ const protoDescriptor = grpc.loadPackageDefinition(packageDefinition) as any;
 const rubiks_solver = protoDescriptor.rubiks_solver;
 
 const client = new rubiks_solver.RubiksSolver(
-  'localhost:50051',
+  'rubiks-py-solver-app:50051',
   grpc.credentials.createInsecure()
 );
 
