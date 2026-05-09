@@ -19,6 +19,7 @@ import {
 
 import { scrambleCube } from './scramble.js';
 import { solveAlgorithmic } from './solver-client.js';
+import { publishSolution } from './rabbitmq.js';
 
 const app = express();
 const port = 3000;
@@ -118,6 +119,20 @@ router.post('/solve', async (req, res) => {
     } catch (err: any) {
         console.error('Error calling solver:', err);
         return res.status(500).json({ error: err.message });
+    }
+});
+
+router.post('/save', async (req, res) => {
+    const data = req.body;
+    if (!data || !data.initialState || !data.moves) {
+        return res.status(400).json({ error: 'Invalid request data. Requires initialState and moves.' });
+    }
+
+    const success = await publishSolution(data);
+    if (success) {
+        return res.json({ message: 'Solution published to RabbitMQ' });
+    } else {
+        return res.status(500).json({ error: 'Failed to publish solution to RabbitMQ' });
     }
 });
 
