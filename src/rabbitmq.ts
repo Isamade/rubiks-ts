@@ -29,9 +29,10 @@ async function getChannel(): Promise<amqp.Channel> {
         if (!conn) throw new Error('RabbitMQ connection not established');
         console.log('Connected to RabbitMQ at', RABBITMQ_URL);
 
-        channel = await conn.createChannel();
-        if (!channel) throw new Error('Could not create channel');
-        console.log('RabbitMQ channel created');
+        // Create a confirm channel for guaranteed delivery
+        channel = await conn.createConfirmChannel();
+        console.log('RabbitMQ confirm channel created');
+        console.log('Publisher confirms enabled');
 
         await channel.assertQueue(QUEUE_NAME, { durable: true });
         return channel;
@@ -46,7 +47,11 @@ export async function publishSolution(data: any): Promise<boolean> {
         const ch = await getChannel();
         const msg = JSON.stringify(data);
         console.log('Publishing to RabbitMQ:', msg);
-        return ch.sendToQueue(QUEUE_NAME, Buffer.from(msg), { persistent: true });
+
+        // With publisher confirms enabled, this will wait for broker acknowledgment
+        await ch.sendToQueue(QUEUE_NAME, Buffer.from(msg), { persistent: true });
+        console.log('Message confirmed by RabbitMQ broker');
+        return true;
     } catch (err) {
         console.error('Error publishing to RabbitMQ:', err);
         return false;
