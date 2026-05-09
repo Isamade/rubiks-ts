@@ -27,9 +27,11 @@ async function getChannel(): Promise<amqp.Channel> {
 
         const conn = connection;
         if (!conn) throw new Error('RabbitMQ connection not established');
+        console.log('Connected to RabbitMQ at', RABBITMQ_URL);
 
         channel = await conn.createChannel();
         if (!channel) throw new Error('Could not create channel');
+        console.log('RabbitMQ channel created');
 
         await channel.assertQueue(QUEUE_NAME, { durable: true });
         return channel;
@@ -43,6 +45,7 @@ export async function publishSolution(data: any): Promise<boolean> {
     try {
         const ch = await getChannel();
         const msg = JSON.stringify(data);
+        console.log('Publishing to RabbitMQ:', msg);
         return ch.sendToQueue(QUEUE_NAME, Buffer.from(msg), { persistent: true });
     } catch (err) {
         console.error('Error publishing to RabbitMQ:', err);

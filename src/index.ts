@@ -129,6 +129,7 @@ router.post('/save', async (req, res) => {
     }
 
     const success = await publishSolution(data);
+    console.log('Publish result:', success);
     if (success) {
         return res.json({ message: 'Solution published to RabbitMQ' });
     } else {
